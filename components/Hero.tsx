@@ -26,7 +26,7 @@ export default function Hero() {
 
 <ActionButton
   icon="🔍"
-  title="Buscar Personas"
+  title="Buscar Personas Reportadas"
   href="/buscar"
 />
 

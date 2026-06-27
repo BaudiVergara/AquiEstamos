@@ -252,6 +252,7 @@ onChange={(e) =>
         <option value="">Sexo</option>
         <option>Hombre</option>
         <option>Mujer</option>
+        <option>No binario</option>
         <option>No se sabe</option>
       </select>
 
