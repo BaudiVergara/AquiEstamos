@@ -174,10 +174,14 @@ function updatePerson(
 
             <input
               type="text"
+              placeholder="Dirección exacta o una referencia del lugar. Por ejemplo: Calle 123, Edificio ABC, Sector XYZ."
               value={address}
               onChange={(e) => setAddress(e.target.value)}
               className="w-full mt-2 border border-gray-300 rounded-lg p-3 bg-white text-black placeholder:text-gray-500"
             />
+            <p className="mt-1 text-sm text-gray-500">
+  Si no conoces la dirección, describe un punto de referencia cercano.
+</p>
           </div>
 
           <div>
@@ -190,7 +194,11 @@ function updatePerson(
               value={peopleEstimated}
               onChange={(e) => setPeopleEstimated(e.target.value)}
               className="w-full mt-2 border border-gray-300 rounded-lg p-3 bg-white text-black placeholder:text-gray-500"
+              min={0}
             />
+                        <p className="mt-1 text-sm text-gray-500">
+  Solo el número de personas, puedes dar detalles adicionales en las observaciones.
+</p>
           </div>
 
           <div>
@@ -222,6 +230,7 @@ function updatePerson(
 
             <textarea
               rows={5}
+              placeholder="Describe lo que viste. Por ejemplo: cuántas personas había, si escuchaste voces, si el acceso está bloqueado o cualquier otro detalle que pueda ayudar a los equipos de rescate."
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               className="w-full border border-gray-300 rounded-lg p-3 bg-white text-black placeholder:text-gray-500"
