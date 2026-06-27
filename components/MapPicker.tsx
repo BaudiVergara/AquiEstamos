@@ -25,8 +25,8 @@ export default function MapPicker({
 }: MapPickerProps) {
   return (
     <MapContainer
-      center={{ lat: 8.5897, lng: -71.1561 }}
-      zoom={15}
+      center={[10.6007, -66.9340]}
+      zoom={14}
       style={{
         height: "400px",
         width: "100%",
