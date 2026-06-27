@@ -20,6 +20,8 @@ export default function ReportarPage() {
   lat: number;
   lng: number;
 } | null>(null);
+const [loading, setLoading] = useState(false);
+const [successMessage, setSuccessMessage] = useState("");
 
 type Person = {
   name: string;
@@ -34,6 +36,9 @@ const [persons, setPersons] = useState<Person[]>([]);
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
+    setLoading(true);
+//setSuccessMessage("");
+
 const { data, error } = await supabase
   .from("incidents")
   .insert({
@@ -47,6 +52,7 @@ const { data, error } = await supabase
   .select()
   .single();
   console.log(data);
+  console.log("Incidente guardado");
 
     if (error) {
   console.error(error);
@@ -73,16 +79,24 @@ const { data, error } = await supabase
     console.error(personsError);
     alert("Error guardando las personas.");
     return;
+    setLoading(false);
   }
 
 }
 
-    alert("✅ Reporte enviado correctamente");
+    setSuccessMessage("✅ Reporte enviado correctamente. Gracias por tu ayuda.");
+    setTimeout(() => {
+    setSuccessMessage("");
+    }, 10000);
+    console.log("MENSAJE DE ÉXITO");
 
     setAddress("");
     setPeopleEstimated("");
     setCertainty("Estoy seguro");
     setNotes("");
+    setPersons([]);
+    setPosition(null);
+    setLoading(false);
   }
 function addPerson() {
   setPersons([
@@ -122,6 +136,14 @@ function updatePerson(
           Registra la última ubicación donde sabes o crees que hay personas atrapadas.
         </p>
 
+
+{successMessage && (
+  <div className="mt-6 rounded-lg bg-green-100 border border-green-300 text-green-800 p-4">
+    {successMessage}
+  </div>
+)}
+
+
         <form
           onSubmit={handleSubmit}
           className="mt-8 space-y-6"
@@ -136,7 +158,7 @@ function updatePerson(
               type="text"
               value={address}
               onChange={(e) => setAddress(e.target.value)}
-              className="w-full mt-2 border rounded-lg p-3"
+              className="w-full mt-2 border border-gray-300 rounded-lg p-3 bg-white text-black placeholder:text-gray-500"
             />
           </div>
 
@@ -149,7 +171,7 @@ function updatePerson(
               type="number"
               value={peopleEstimated}
               onChange={(e) => setPeopleEstimated(e.target.value)}
-              className="w-full mt-2 border rounded-lg p-3"
+              className="w-full mt-2 border border-gray-300 rounded-lg p-3 bg-white text-black placeholder:text-gray-500"
             />
           </div>
 
@@ -161,7 +183,7 @@ function updatePerson(
             <select
               value={certainty}
               onChange={(e) => setCertainty(e.target.value)}
-              className="w-full mt-2 border rounded-lg p-3"
+              className="w-full border border-gray-300 rounded-lg p-3 mb-3 bg-white text-black"
             >
               <option>Estoy seguro</option>
               <option>Creo que están allí</option>
@@ -178,7 +200,7 @@ function updatePerson(
               rows={5}
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
-              className="w-full mt-2 border rounded-lg p-3"
+              className="w-full border border-gray-300 rounded-lg p-3 bg-white text-black placeholder:text-gray-500"
             />
           </div>
           <div>
@@ -293,12 +315,19 @@ onChange={(e) =>
   ➕ Agregar una persona
 </button>
 
-          <button
-            type="submit"
-            className="bg-red-600 text-white px-8 py-3 rounded-lg hover:bg-red-700"
-          >
-            Enviar Reporte
-          </button>
+{successMessage && (
+  <div className="rounded-lg bg-green-100 border border-green-300 text-green-800 p-4">
+    {successMessage}
+  </div>
+)}
+
+        <button
+          type="submit"
+          disabled={loading}
+          className="w-full bg-red-600 text-white px-8 py-3 rounded-lg hover:bg-red-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
+        >
+        {loading ? "Enviando..." : "Enviar Reporte"}
+        </button>
 </div>
 
         </form>
