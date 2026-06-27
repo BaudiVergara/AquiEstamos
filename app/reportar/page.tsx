@@ -20,7 +20,16 @@ export default function ReportarPage() {
   lat: number;
   lng: number;
 } | null>(null);
-const [persons, setPersons] = useState([]);
+
+type Person = {
+  name: string;
+  age: string;
+  sex: string;
+  medical_conditions: string;
+  notes: string;
+};
+
+const [persons, setPersons] = useState<Person[]>([]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
