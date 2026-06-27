@@ -11,6 +11,16 @@ import "leaflet/dist/leaflet.css";
 
 import Link from "next/link";
 
+import L from "leaflet";
+
+const incidentIcon = L.divIcon({
+  html: `<div style="font-size:30px;">📍</div>`,
+  className: "",
+  iconSize: [30, 30],
+  iconAnchor: [15, 30],
+  popupAnchor: [0, -30],
+});
+
 
 type Incident = {
   id: string;
@@ -47,10 +57,11 @@ export default function IncidentMap({ incidents }: Props) {
       incident.longitude != null
   )
   .map((incident) => (
-    <Marker
-      key={incident.id}
-      position={[incident.latitude, incident.longitude]}
-    >
+<Marker
+  key={incident.id}
+  position={[incident.latitude, incident.longitude]}
+  icon={incidentIcon}
+>
           <Popup>
 
             <strong>{incident.address}</strong>

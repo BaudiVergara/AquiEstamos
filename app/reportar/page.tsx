@@ -14,7 +14,7 @@ const MapPicker = dynamic(
 export default function ReportarPage() {
   const [address, setAddress] = useState("");
   const [peopleEstimated, setPeopleEstimated] = useState("");
-  const [certainty, setCertainty] = useState("Estoy seguro");
+  const [certainty, setCertainty] = useState("");
   const [notes, setNotes] = useState("");
   const [position, setPosition] = useState<{
   lat: number;
@@ -22,6 +22,8 @@ export default function ReportarPage() {
 } | null>(null);
 const [loading, setLoading] = useState(false);
 const [successMessage, setSuccessMessage] = useState("");
+const [locationError, setLocationError] = useState("");
+const [certaintyError, setCertaintyError] = useState("");
 
 type Person = {
   name: string;
@@ -35,6 +37,22 @@ const [persons, setPersons] = useState<Person[]>([]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
+
+    setLocationError("");
+setCertaintyError("");
+
+if (!position) {
+  setLocationError("📍 Debes marcar la ubicación en el mapa antes de enviar el reporte.");
+  return;
+}
+
+if (!certainty) {
+  setCertaintyError("🎯 Debes seleccionar el nivel de certeza.");
+  return;
+}
+if (!certainty) {
+  return;
+}
 
     setLoading(true);
 //setSuccessMessage("");
@@ -92,7 +110,7 @@ const { data, error } = await supabase
 
     setAddress("");
     setPeopleEstimated("");
-    setCertainty("Estoy seguro");
+    setCertainty("");
     setNotes("");
     setPersons([]);
     setPosition(null);
@@ -185,10 +203,16 @@ function updatePerson(
               onChange={(e) => setCertainty(e.target.value)}
               className="w-full border border-gray-300 rounded-lg p-3 mb-3 bg-white text-black"
             >
+              <option value="">Selecciona una opción...</option>
               <option>Estoy seguro</option>
               <option>Creo que están allí</option>
               <option>No estoy seguro</option>
             </select>
+            {certaintyError && (
+  <div className="mt-2 rounded-lg bg-red-100 border border-red-300 text-red-700 p-3">
+    {certaintyError}
+  </div>
+)}
           </div>
 
           <div>
@@ -224,6 +248,14 @@ function updatePerson(
       Longitud: {position.lng.toFixed(6)}
     </p>
   )}
+
+  {locationError && (
+  <div className="mt-3 rounded-lg bg-red-100 border border-red-300 text-red-700 p-3">
+    {locationError}
+  </div>
+)}
+
+
 </div>
 <h2 className="text-2xl font-bold mt-10">
   Personas reportadas
@@ -306,6 +338,13 @@ onChange={(e) =>
 
 </div>
 
+{successMessage && (
+  <div className="rounded-lg bg-green-100 border border-green-300 text-green-800 p-4">
+    {successMessage}
+  </div>
+)}
+
+
 <div className="mt-8 flex flex-col gap-4">
 <button
   type="button"
@@ -318,6 +357,18 @@ onChange={(e) =>
 {successMessage && (
   <div className="rounded-lg bg-green-100 border border-green-300 text-green-800 p-4">
     {successMessage}
+  </div>
+)}
+
+{locationError && (
+  <div className="rounded-lg bg-red-100 border border-red-300 text-red-700 p-3">
+    {locationError}
+  </div>
+)}
+
+{certaintyError && (
+  <div className="rounded-lg bg-red-100 border border-red-300 text-red-700 p-3">
+    {certaintyError}
   </div>
 )}
 

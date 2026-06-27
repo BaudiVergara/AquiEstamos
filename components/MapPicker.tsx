@@ -3,6 +3,14 @@
 import { MapContainer, TileLayer, Marker, useMapEvents } from "react-leaflet";
 import { LatLngLiteral } from "leaflet";
 import "leaflet/dist/leaflet.css";
+import L from "leaflet";
+
+const incidentIcon = L.divIcon({
+  html: `<div style="font-size:30px;">📍</div>`,
+  className: "",
+  iconSize: [30, 30],
+  iconAnchor: [15, 30],
+});
 
 type MapPickerProps = {
   position: LatLngLiteral | null;
@@ -40,7 +48,12 @@ export default function MapPicker({
 
       <ClickHandler onSelect={onSelect} />
 
-      {position && <Marker position={position} />}
+      {position && (
+         <Marker
+         position={position}
+          icon={incidentIcon}
+  />
+)}
     </MapContainer>
   );
 }
