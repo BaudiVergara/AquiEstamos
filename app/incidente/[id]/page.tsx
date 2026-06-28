@@ -1,5 +1,6 @@
 import { supabase } from "@/lib/supabase";
 import StatusSelector from "@/components/StatusSelector";
+import BackToHome from "@/components/BackToHome";
 
 type Props = {
   params: Promise<{
@@ -38,6 +39,12 @@ export default async function IncidentePage({ params }: Props) {
 
   return (
     <main className="min-h-screen bg-slate-100 p-8">
+
+      <div className="mb-6">
+        <BackToHome />
+      </div>
+
+
       <div className="max-w-3xl mx-auto">
         <h1 className="text-4xl font-bold text-blue-700">🚨 Incidente</h1>
 

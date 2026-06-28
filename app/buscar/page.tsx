@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useEffect } from "react";
 import { supabase } from "@/lib/supabase";
 import Link from "next/link";
+import BackToHome from "@/components/BackToHome";
 
 export default function BuscarPage() {
   const [search, setSearch] = useState("");
@@ -59,6 +60,11 @@ export default function BuscarPage() {
 
   return (
     <main className="min-h-screen bg-slate-100 p-6">
+
+      <div className="mb-6">
+        <BackToHome />
+      </div>
+
       <div className="max-w-2xl mx-auto">
         <h1 className="text-4xl font-bold text-blue-700">🔍 Buscar Personas</h1>
 

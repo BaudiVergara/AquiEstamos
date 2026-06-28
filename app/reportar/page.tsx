@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { supabase } from "@/lib/supabase";
 import dynamic from "next/dynamic";
+import BackToHome from "@/components/BackToHome";
 
 const MapPicker = dynamic(() => import("@/components/MapPicker"), {
   ssr: false,
@@ -168,6 +169,11 @@ await supabase
   }
   return (
     <main className="min-h-screen bg-slate-100 p-6">
+      
+      <div className="mb-6">
+        <BackToHome />
+      </div>
+
       <div className="max-w-2xl mx-auto">
         <h1 className="text-4xl font-bold text-red-600">
           🚨 Reportar Personas Atrapadas

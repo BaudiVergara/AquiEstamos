@@ -3,6 +3,7 @@
 import dynamic from "next/dynamic";
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
+import BackToHome from "@/components/BackToHome";
 
 const MapPicker = dynamic(
   () => import("@/components/MapPicker"),
@@ -44,6 +45,10 @@ export default function MapaPage() {
   return (
 
     <main className="min-h-screen bg-slate-100 p-6">
+
+            <div className="mb-6">
+              <BackToHome />
+            </div>
 
       <div className="max-w-6xl mx-auto">
 
