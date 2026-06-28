@@ -1,5 +1,6 @@
 import ActionButton from "./ActionButton";
 import StatCard from "./StatCard";
+import Image from "next/image";
 type HeroProps = {
   reports: number;
   reportsCompleted: number;
@@ -15,7 +16,17 @@ export default function Hero({
 }: HeroProps) {
   return (
     <main className="min-h-screen bg-slate-100 flex flex-col items-center px-6 py-12">
-      <h1 className="text-5xl font-bold text-blue-700">📍AquíEstamos</h1>
+      <div className="flex items-center justify-center gap-3">
+  <h1 className="text-5xl font-bold text-blue-700">
+    📍AquíEstamos
+  </h1>
+    <Image
+    src="/ve.png"
+    alt="Bandera de Venezuela"
+    width={38}
+    height={28}
+  />
+</div>
 
       <p className="mt-4 text-center text-xl text-gray-700 max-w-xl">
         Plataforma para registrar la ubicacion de personas atrapadas en los escombros.
