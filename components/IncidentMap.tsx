@@ -1,11 +1,6 @@
 "use client";
 
-import {
-  MapContainer,
-  TileLayer,
-  Marker,
-  Popup,
-} from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 
 import "leaflet/dist/leaflet.css";
 
@@ -13,14 +8,20 @@ import Link from "next/link";
 
 import L from "leaflet";
 
-const incidentIcon = L.divIcon({
-  html: `<div style="font-size:30px;">📍</div>`,
-  className: "",
-  iconSize: [30, 30],
-  iconAnchor: [15, 30],
-  popupAnchor: [0, -30],
-});
+function getIncidentIcon(status: string) {
+  let color = "#eab308"; // amarillo
 
+  if (status === "rescuing") color = "#f97316";
+  if (status === "rescued") color = "#16a34a";
+  if (status === "closed") color = "#374151";
+
+  return L.divIcon({
+    html: `<div style="font-size:30px;color:${color};">📍</div>`,
+    className: "",
+    iconSize: [30, 30],
+    iconAnchor: [15, 30],
+  });
+}
 
 type Incident = {
   id: string;
@@ -34,10 +35,9 @@ type Props = {
 };
 
 export default function IncidentMap({ incidents }: Props) {
-
   return (
     <MapContainer
-      center={[10.6007, -66.9340]}
+      center={[10.6007, -66.934]}
       zoom={12}
       style={{
         height: "600px",
@@ -50,32 +50,25 @@ export default function IncidentMap({ incidents }: Props) {
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
 
-{incidents
-  .filter(
-    (incident) =>
-      incident.latitude != null &&
-      incident.longitude != null
-  )
-  .map((incident) => (
-<Marker
-  key={incident.id}
-  position={[incident.latitude, incident.longitude]}
-  icon={incidentIcon}
->
-          <Popup>
+      {incidents
+        .filter(
+          (incident) => incident.latitude != null && incident.longitude != null
+        )
+        .map((incident) => (
+          <Marker
+            key={incident.id}
+            position={[incident.latitude, incident.longitude]}
+            icon={getIncidentIcon(incident.status)}
+          >
+            <Popup>
+              <strong>{incident.address}</strong>
 
-            <strong>{incident.address}</strong>
+              <br />
 
-            <br />
-
-            <Link href={`/incidente/${incident.id}`}>
-              Ver incidente →
-            </Link>
-
-          </Popup>
-        </Marker>
-      ))}
-
+              <Link href={`/incidente/${incident.id}`}>Ver incidente →</Link>
+            </Popup>
+          </Marker>
+        ))}
     </MapContainer>
   );
 }

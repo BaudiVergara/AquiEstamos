@@ -1,4 +1,5 @@
 import { supabase } from "@/lib/supabase";
+import StatusSelector from "@/components/StatusSelector";
 
 type Props = {
   params: Promise<{
@@ -19,6 +20,11 @@ export default async function IncidentePage({ params }: Props) {
     .from("persons")
     .select("*")
     .eq("incident_id", id);
+
+  /* const { data: photos } = await supabase
+    .from("incident_photos")
+    .select("*")
+    .eq("incident_id", id); */
 
   if (error || !incident) {
     return (
@@ -49,6 +55,18 @@ export default async function IncidentePage({ params }: Props) {
             <div className="bg-slate-50 rounded-lg p-4">
               <p className="text-sm text-gray-500">🎯 Nivel de certeza</p>
               <p className="text-xl font-semibold">{incident.certainty}</p>
+              <p className="mt-2">
+<div className="mt-4">
+  <p className="font-semibold mb-2">
+    🚦 Estado
+  </p>
+
+  <StatusSelector
+    incidentId={incident.id}
+    currentStatus={incident.status}
+  />
+</div>
+</p>
             </div>
 
             <div className="bg-slate-50 rounded-lg p-4 md:col-span-2">
@@ -66,6 +84,33 @@ export default async function IncidentePage({ params }: Props) {
               {incident.notes || "No se agregaron observaciones."}
             </div>
           </div>
+
+          {/*{photos && photos.length > 0 && (
+
+  <div className="mt-8">
+
+    <h2 className="text-2xl font-bold mb-4">
+      📷 Fotografías
+    </h2>
+
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+      {photos.map((photo) => (
+
+        <img
+          key={photo.id}
+          src={photo.photo_url}
+          alt="Fotografía del incidente"
+          className="rounded-xl shadow border w-full"
+        />
+
+      ))}
+
+    </div>
+
+  </div> */}
+
+
 
           <h2 className="text-2xl font-bold mb-6">👥 Personas reportadas</h2>
 

@@ -4,12 +4,9 @@ import { useState } from "react";
 import { supabase } from "@/lib/supabase";
 import dynamic from "next/dynamic";
 
-const MapPicker = dynamic(
-  () => import("@/components/MapPicker"),
-  {
-    ssr: false,
-  }
-);
+const MapPicker = dynamic(() => import("@/components/MapPicker"), {
+  ssr: false,
+});
 
 export default function ReportarPage() {
   const [address, setAddress] = useState("");
@@ -17,96 +14,127 @@ export default function ReportarPage() {
   const [certainty, setCertainty] = useState("");
   const [notes, setNotes] = useState("");
   const [position, setPosition] = useState<{
-  lat: number;
-  lng: number;
-} | null>(null);
-const [loading, setLoading] = useState(false);
-const [successMessage, setSuccessMessage] = useState("");
-const [locationError, setLocationError] = useState("");
-const [certaintyError, setCertaintyError] = useState("");
+    lat: number;
+    lng: number;
+  } | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
+  const [locationError, setLocationError] = useState("");
+  const [certaintyError, setCertaintyError] = useState("");
 
-type Person = {
-  name: string;
-  age: string;
-  sex: string;
-  medical_conditions: string;
-  notes: string;
-};
+  type Person = {
+    name: string;
+    age: string;
+    sex: string;
+    medical_conditions: string;
+    notes: string;
+  };
 
-const [persons, setPersons] = useState<Person[]>([]);
+  const [persons, setPersons] = useState<Person[]>([]);
+  /* const [photos, setPhotos] = useState<File[]>([]); */
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
     setLocationError("");
-setCertaintyError("");
+    setCertaintyError("");
 
-if (!position) {
-  setLocationError("📍 Debes marcar la ubicación en el mapa antes de enviar el reporte.");
-  return;
-}
+    if (!position) {
+      setLocationError(
+        "📍 Debes marcar la ubicación en el mapa antes de enviar el reporte."
+      );
+      return;
+    }
 
-if (!certainty) {
-  setCertaintyError("🎯 Debes seleccionar el nivel de certeza.");
-  return;
-}
-if (!certainty) {
-  return;
-}
+    if (!certainty) {
+      setCertaintyError("🎯 Debes seleccionar el nivel de certeza.");
+      return;
+    }
+    if (!certainty) {
+      return;
+    }
 
     setLoading(true);
-//setSuccessMessage("");
+    //setSuccessMessage("");
 
-const { data, error } = await supabase
-  .from("incidents")
-  .insert({
-    address,
-    people_estimated: Number(peopleEstimated),
-    certainty,
-    notes,
-    latitude: position?.lat,
-    longitude: position?.lng,
-  })
-  .select()
-  .single();
-  console.log(data);
-  console.log("Incidente guardado");
+    const { data, error } = await supabase
+      .from("incidents")
+      .insert({
+        address,
+        people_estimated: Number(peopleEstimated),
+        certainty,
+        notes,
+        latitude: position?.lat,
+        longitude: position?.lng,
+      })
+      .select()
+      .single();
 
     if (error) {
-  console.error(error);
-  alert(JSON.stringify(error, null, 2));
-  return;
+      console.error(error);
+      alert(JSON.stringify(error, null, 2));
+      return;
     }
 
     if (persons.length > 0) {
+    }
 
-  const personsToInsert = persons.map((person) => ({
-    incident_id: data.id,
-    name: person.name,
-    age: person.age ? Number(person.age) : null,
-    sex: person.sex,
-    medical_conditions: person.medical_conditions,
-    notes: person.notes,
-  }));
+    const personsToInsert = persons.map((person) => ({
+      incident_id: data.id,
+      name: person.name,
+      age: person.age ? Number(person.age) : null,
+      sex: person.sex,
+      medical_conditions: person.medical_conditions,
+      notes: person.notes,
+    }));
 
-  const { error: personsError } = await supabase
-    .from("persons")
-    .insert(personsToInsert);
+    const { error: personsError } = await supabase
+      .from("persons")
+      .insert(personsToInsert);
 
-  if (personsError) {
-    console.error(personsError);
-    alert("Error guardando las personas.");
-    return;
-    setLoading(false);
+    if (personsError) {
+      console.error(personsError);
+      alert("Error guardando las personas.");
+      return;
+      setLoading(false);
+    }
+
+    /*
+  if (photos.length > 0) {
+
+  const photo = photos[0];
+
+  const fileName = `${data.id}/${photo.name}`;
+
+  const { error: uploadError } = await supabase.storage
+    .from("incident-photos")
+    .upload(fileName, photo);
+
+  if (uploadError) {
+    console.error(uploadError);
+  } else {
+    console.log("✅ Foto subida");
   }
 
-}
+  const { data: publicUrl } = supabase.storage
+  .from("incident-photos")
+  .getPublicUrl(fileName);
 
-    setSuccessMessage("✅ Reporte enviado correctamente. Gracias por tu ayuda.");
+await supabase
+  .from("incident_photos")
+  .insert({
+    incident_id: data.id,
+    photo_url: publicUrl.publicUrl,
+  });
+
+} */
+
+    setSuccessMessage(
+      "✅ Reporte enviado correctamente. Gracias por tu ayuda."
+    );
     setTimeout(() => {
-    setSuccessMessage("");
+      setSuccessMessage("");
     }, 10000);
-    console.log("MENSAJE DE ÉXITO");
 
     setAddress("");
     setPeopleEstimated("");
@@ -116,78 +144,50 @@ const { data, error } = await supabase
     setPosition(null);
     setLoading(false);
   }
-function addPerson() {
-  setPersons([
-    ...persons,
-    {
-      name: "",
-      age: "",
-      sex: "",
-      medical_conditions: "",
-      notes: "",
-    },
-  ]);
-}
-function updatePerson(
-  index: number,
-  field: string,
-  value: string
-) {
-  const updated = [...persons];
+  function addPerson() {
+    setPersons([
+      ...persons,
+      {
+        name: "",
+        age: "",
+        sex: "",
+        medical_conditions: "",
+        notes: "",
+      },
+    ]);
+  }
+  function updatePerson(index: number, field: string, value: string) {
+    const updated = [...persons];
 
-  updated[index] = {
-    ...updated[index],
-    [field]: value,
-  };
+    updated[index] = {
+      ...updated[index],
+      [field]: value,
+    };
 
-  setPersons(updated);
-}
+    setPersons(updated);
+  }
   return (
     <main className="min-h-screen bg-slate-100 p-6">
       <div className="max-w-2xl mx-auto">
-
         <h1 className="text-4xl font-bold text-red-600">
           🚨 Reportar Personas Atrapadas
         </h1>
 
         <p className="mt-2 text-gray-600">
-          Registra la última ubicación donde sabes o crees que hay personas atrapadas.
+          Registra la última ubicación donde sabes o crees que hay personas
+          atrapadas.
         </p>
 
-
-{successMessage && (
-  <div className="mt-6 rounded-lg bg-green-100 border border-green-300 text-green-800 p-4">
-    {successMessage}
-  </div>
-)}
-
-
-        <form
-          onSubmit={handleSubmit}
-          className="mt-8 space-y-6"
-        >
-
-          <div>
-            <label className="font-semibold">
-              Dirección
-            </label>
-
-            <input
-              type="text"
-              placeholder="Dirección exacta o una referencia del lugar. Por ejemplo: Calle 123, Edificio ABC, Sector XYZ."
-              value={address}
-              onChange={(e) => setAddress(e.target.value)}
-              className="w-full mt-2 border border-gray-300 rounded-lg p-3 bg-white text-black placeholder:text-gray-500"
-            />
-            <p className="mt-1 text-sm text-gray-500">
-  Si no conoces la dirección, describe un punto de referencia cercano.
-</p>
+        {successMessage && (
+          <div className="mt-6 rounded-lg bg-green-100 border border-green-300 text-green-800 p-4">
+            {successMessage}
           </div>
+        )}
+
+        <form onSubmit={handleSubmit} className="mt-8 space-y-6">
 
           <div>
-            <label className="font-semibold">
-              Personas estimadas
-            </label>
+            <label className="font-semibold">Personas estimadas</label>
 
             <input
               type="number"
@@ -196,15 +196,14 @@ function updatePerson(
               className="w-full mt-2 border border-gray-300 rounded-lg p-3 bg-white text-black placeholder:text-gray-500"
               min={0}
             />
-                        <p className="mt-1 text-sm text-gray-500">
-  Solo el número de personas, puedes dar detalles adicionales en las observaciones.
-</p>
+            <p className="mt-1 text-sm text-gray-500">
+              Solo el número de personas, puedes dar detalles adicionales en las
+              observaciones.
+            </p>
           </div>
 
           <div>
-            <label className="font-semibold">
-              Nivel de certeza
-            </label>
+            <label className="font-semibold">Nivel de certeza</label>
 
             <select
               value={certainty}
@@ -217,16 +216,14 @@ function updatePerson(
               <option>No estoy seguro</option>
             </select>
             {certaintyError && (
-  <div className="mt-2 rounded-lg bg-red-100 border border-red-300 text-red-700 p-3">
-    {certaintyError}
-  </div>
-)}
+              <div className="mt-2 rounded-lg bg-red-100 border border-red-300 text-red-700 p-3">
+                {certaintyError}
+              </div>
+            )}
           </div>
 
           <div>
-            <label className="font-semibold">
-              Observaciones
-            </label>
+            <label className="font-semibold">Observaciones</label>
 
             <textarea
               rows={5}
@@ -236,162 +233,178 @@ function updatePerson(
               className="w-full border border-gray-300 rounded-lg p-3 bg-white text-black placeholder:text-gray-500"
             />
           </div>
+
           <div>
-  <label className="font-semibold block mb-2">
-    Ubicación en el mapa
-  </label>
+            <label className="font-semibold">Dirección</label>
 
-  <p className="text-sm text-gray-600 mb-3">
-    Si no conoces la dirección exacta, marca el lugar en el mapa.
-  </p>
+            <input
+              type="text"
+              placeholder="Dirección exacta o una referencia del lugar. Por ejemplo: Calle 123, Edificio ABC, Sector XYZ."
+              value={address}
+              onChange={(e) => setAddress(e.target.value)}
+              className="w-full mt-2 border border-gray-300 rounded-lg p-3 bg-white text-black placeholder:text-gray-500"
+            />
+            <p className="mt-1 text-sm text-gray-500">
+              Si no conoces la dirección, describe un punto de referencia
+              cercano.
+            </p>
+          </div>
 
-  <MapPicker
-    position={position}
-    onSelect={setPosition}
-  />
+          {/*
+          <div className="mt-6">
+            <label className="block font-semibold mb-2">
+              📷 Fotografías (opcional)
+            </label>
 
-  {position && (
-    <p className="mt-3 text-sm text-gray-600">
-      Latitud: {position.lat.toFixed(6)}
-      <br />
-      Longitud: {position.lng.toFixed(6)}
-    </p>
-  )}
+            <input
+              type="file"
+              multiple
+              accept="image/*"
+              onChange={(e) => {
+                const files = Array.from(e.target.files || []);
+                setPhotos(files);
+              }}
+              className="w-full border border-gray-300 rounded-lg p-3 bg-white text-black"
+            />
 
-  {locationError && (
-  <div className="mt-3 rounded-lg bg-red-100 border border-red-300 text-red-700 p-3">
-    {locationError}
-  </div>
-)}
+            <p className="mt-1 text-sm text-gray-500">
+              Agrega fotografías del lugar si es seguro hacerlo.
+            </p>
+            {photos.length > 0 && (
+              <p className="mt-2 text-green-700 font-medium">
+                ✅ {photos.length} fotografía{photos.length > 1 ? "s" : ""}{" "}
+                seleccionada{photos.length > 1 ? "s" : ""}.
+              </p>
+            )}
+          </div>
 
+          */}
 
-</div>
-<h2 className="text-2xl font-bold mt-10">
-  Personas reportadas
-</h2>
+          <div>
+            <label className="font-semibold block mb-2">
+              Ubicación en el mapa
+            </label>
 
-<div className="space-y-6 mt-4">
+            <p className="text-sm text-gray-600 mb-3">
+              Si no conoces la dirección exacta, marca el lugar en el mapa.
+            </p>
 
-<hr className="my-10" />
+            <MapPicker position={position} onSelect={setPosition} />
 
-<h2 className="text-2xl font-bold">
-  👤 Personas identificadas (Opcional)
-</h2>
+            {position && (
+              <p className="mt-3 text-sm text-gray-600">
+                Latitud: {position.lat.toFixed(6)}
+                <br />
+                Longitud: {position.lng.toFixed(6)}
+              </p>
+            )}
 
-<p className="text-gray-600 mt-2 mb-6">
-  Si conoces información de alguna persona atrapada puedes agregarla aquí.
-  Si no conoces a nadie, simplemente envía el reporte.
-</p>
+            {locationError && (
+              <div className="mt-3 rounded-lg bg-red-100 border border-red-300 text-red-700 p-3">
+                {locationError}
+              </div>
+            )}
+          </div>
+          <h2 className="text-2xl font-bold mt-10">Personas reportadas</h2>
 
-  {persons.map((person, index) => (
+          <div className="space-y-6 mt-4">
+            <hr className="my-10" />
 
-    <div
-      key={index}
-      className="border rounded-xl p-5 bg-white"
-    >
+            <h2 className="text-2xl font-bold">
+              👤 Personas identificadas (Opcional)
+            </h2>
 
-      <h3 className="font-semibold mb-4">
-        Persona {index + 1}
-      </h3>
+            <p className="text-gray-600 mt-2 mb-6">
+              Si conoces información de alguna persona atrapada puedes agregarla
+              aquí. Si no conoces a nadie, simplemente envía el reporte.
+            </p>
 
-      <input
-        type="text"
-        placeholder="Nombre (si se conoce)"
-        value={person.name}
-onChange={(e) =>
-  updatePerson(index, "name", e.target.value)
-}
-        className="w-full border rounded-lg p-3 mb-3"
-      />
+            {persons.map((person, index) => (
+              <div key={index} className="border rounded-xl p-5 bg-white">
+                <h3 className="font-semibold mb-4">Persona {index + 1}</h3>
 
-      <input
-  type="number"
-  placeholder="Edad aproximada"
-  value={person.age}
-  onChange={(e) =>
-    updatePerson(index, "age", e.target.value)
-  }
-  className="w-full border rounded-lg p-3 mb-3"
-/>
+                <input
+                  type="text"
+                  placeholder="Nombre (si se conoce)"
+                  value={person.name}
+                  onChange={(e) => updatePerson(index, "name", e.target.value)}
+                  className="w-full border rounded-lg p-3 mb-3"
+                />
 
-<select
-  value={person.sex}
-  onChange={(e) =>
-    updatePerson(index, "sex", e.target.value)
-  }
-  className="w-full border rounded-lg p-3 mb-3"
->
-        <option value="">Sexo</option>
-        <option>Hombre</option>
-        <option>Mujer</option>
-        <option>No binario</option>
-        <option>No se sabe</option>
-      </select>
+                <input
+                  type="number"
+                  placeholder="Edad aproximada"
+                  value={person.age}
+                  onChange={(e) => updatePerson(index, "age", e.target.value)}
+                  className="w-full border rounded-lg p-3 mb-3"
+                />
 
-<textarea
-  placeholder="Condiciones médicas o información importante"
-  value={person.medical_conditions}
-  onChange={(e) =>
-    updatePerson(
-      index,
-      "medical_conditions",
-      e.target.value
-    )
-  }
-  className="w-full border rounded-lg p-3"
-/>
+                <select
+                  value={person.sex}
+                  onChange={(e) => updatePerson(index, "sex", e.target.value)}
+                  className="w-full border rounded-lg p-3 mb-3"
+                >
+                  <option value="">Sexo</option>
+                  <option>Hombre</option>
+                  <option>Mujer</option>
+                  <option>No binario</option>
+                  <option>No se sabe</option>
+                </select>
 
-    </div>
+                <textarea
+                  placeholder="Condiciones médicas o información importante"
+                  value={person.medical_conditions}
+                  onChange={(e) =>
+                    updatePerson(index, "medical_conditions", e.target.value)
+                  }
+                  className="w-full border rounded-lg p-3"
+                />
+              </div>
+            ))}
+          </div>
 
-  ))}
+          {successMessage && (
+            <div className="rounded-lg bg-green-100 border border-green-300 text-green-800 p-4">
+              {successMessage}
+            </div>
+          )}
 
-</div>
+          <div className="mt-8 flex flex-col gap-4">
+            <button
+              type="button"
+              onClick={addPerson}
+              className="border border-blue-600 text-blue-600 px-5 py-3 rounded-lg hover:bg-blue-50"
+            >
+              ➕ Agregar una persona
+            </button>
 
-{successMessage && (
-  <div className="rounded-lg bg-green-100 border border-green-300 text-green-800 p-4">
-    {successMessage}
-  </div>
-)}
+            {successMessage && (
+              <div className="rounded-lg bg-green-100 border border-green-300 text-green-800 p-4">
+                {successMessage}
+              </div>
+            )}
 
+            {locationError && (
+              <div className="rounded-lg bg-red-100 border border-red-300 text-red-700 p-3">
+                {locationError}
+              </div>
+            )}
 
-<div className="mt-8 flex flex-col gap-4">
-<button
-  type="button"
-  onClick={addPerson}
-  className="border border-blue-600 text-blue-600 px-5 py-3 rounded-lg hover:bg-blue-50"
->
-  ➕ Agregar una persona
-</button>
+            {certaintyError && (
+              <div className="rounded-lg bg-red-100 border border-red-300 text-red-700 p-3">
+                {certaintyError}
+              </div>
+            )}
 
-{successMessage && (
-  <div className="rounded-lg bg-green-100 border border-green-300 text-green-800 p-4">
-    {successMessage}
-  </div>
-)}
-
-{locationError && (
-  <div className="rounded-lg bg-red-100 border border-red-300 text-red-700 p-3">
-    {locationError}
-  </div>
-)}
-
-{certaintyError && (
-  <div className="rounded-lg bg-red-100 border border-red-300 text-red-700 p-3">
-    {certaintyError}
-  </div>
-)}
-
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full bg-red-600 text-white px-8 py-3 rounded-lg hover:bg-red-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
-        >
-        {loading ? "Enviando..." : "Enviar Reporte"}
-        </button>
-</div>
-
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-red-600 text-white px-8 py-3 rounded-lg hover:bg-red-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
+            >
+              {loading ? "Enviando..." : "Enviar Reporte"}
+            </button>
+          </div>
         </form>
-
       </div>
     </main>
   );
