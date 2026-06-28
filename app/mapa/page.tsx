@@ -53,12 +53,16 @@ export default function MapaPage() {
       <div className="max-w-6xl mx-auto">
 
         <h1 className="text-4xl font-bold text-blue-700">
-          🗺️ Mapa de Incidentes
+          🗺️ Mapa de ubicaciones críticas
         </h1>
 
         <p className="text-gray-600 mt-2">
-          Visualiza todos los reportes registrados.
+          Visualiza todos los reportes registrados
         </p>
+
+        <p className="mt-6 font-semibold">
+  Incidentes registrados: {incidents.length}
+</p>
 
         <div className="mt-8">
 
@@ -68,9 +72,6 @@ export default function MapaPage() {
 
       </div>
 
-<p className="mt-6 font-semibold">
-  Incidentes cargados: {incidents.length}
-</p>
 
     </main>
 

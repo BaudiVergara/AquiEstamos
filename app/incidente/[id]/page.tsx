@@ -22,10 +22,10 @@ export default async function IncidentePage({ params }: Props) {
     .select("*")
     .eq("incident_id", id);
 
-  /* const { data: photos } = await supabase
+  const { data: photos } = await supabase
     .from("incident_photos")
     .select("*")
-    .eq("incident_id", id); */
+    .eq("incident_id", id); 
 
   if (error || !incident) {
     return (
@@ -61,8 +61,8 @@ export default async function IncidentePage({ params }: Props) {
 
             <div className="bg-slate-50 rounded-lg p-4">
               <p className="text-sm text-gray-500">🎯 Nivel de certeza</p>
-              <p className="text-xl font-semibold">{incident.certainty}</p>
-              <p className="mt-2">
+<p className="text-xl font-semibold">{incident.certainty}</p>
+
 <div className="mt-4">
   <p className="font-semibold mb-2">
     🚦 Estado
@@ -72,14 +72,19 @@ export default async function IncidentePage({ params }: Props) {
     incidentId={incident.id}
     currentStatus={incident.status}
   />
+
+  <p className="mt-2 text-sm text-gray-500">
+    Ayúdanos a mantener actualizado el estado de este incidente. Cuando la persona sea rescatada, regístralo.
+  </p>
 </div>
-</p>
             </div>
 
             <div className="bg-slate-50 rounded-lg p-4 md:col-span-2">
               <p className="text-sm text-gray-500">📅 Fecha del reporte</p>
               <p className="font-semibold">
-                {new Date(incident.created_at).toLocaleString("es-VE")}
+                {new Date(incident.created_at).toLocaleString("es-VE", {
+  timeZone: "America/Caracas",
+})}
               </p>
             </div>
           </div>
@@ -92,7 +97,7 @@ export default async function IncidentePage({ params }: Props) {
             </div>
           </div>
 
-          {/*{photos && photos.length > 0 && (
+          {photos && photos.length > 0 && (
 
   <div className="mt-8">
 
@@ -115,7 +120,9 @@ export default async function IncidentePage({ params }: Props) {
 
     </div>
 
-  </div> */}
+  </div>
+
+    )}
 
 
 

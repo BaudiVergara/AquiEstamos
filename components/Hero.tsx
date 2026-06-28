@@ -15,15 +15,14 @@ export default function Hero({
 }: HeroProps) {
   return (
     <main className="min-h-screen bg-slate-100 flex flex-col items-center px-6 py-12">
-      <h1 className="text-5xl font-bold text-blue-700">AquíEstamos</h1>
+      <h1 className="text-5xl font-bold text-blue-700">📍AquíEstamos</h1>
 
       <p className="mt-4 text-center text-xl text-gray-700 max-w-xl">
-        Plataforma ciudadana para emergencias.
+        Plataforma para registrar la ubicacion de personas atrapadas en los escombros.
       </p>
 
-      <p className="mt-2 text-center text-gray-600 max-w-xl">
-        Conectando personas, voluntarios y equipos de rescate cuando más se
-        necesitan.
+      <p className="mt-3 text-center text-gray-600 max-w-xl font-bold">
+        Si conoces la ubicación de una o varias personas atrapadas bajo los escombros, ¡regístrala aquí!
       </p>
 
       <div className="mt-10 grid grid-cols-2 lg:grid-cols-4 gap-4 w-full max-w-5xl">
@@ -43,23 +42,24 @@ export default function Hero({
       <div className="mt-10 flex flex-col gap-4 w-full items-center">
         <ActionButton
           icon="🔴"
-          title="Reportar Personas Atrapadas"
+          title="Reportar personas atrapadas"
           href="/reportar"
         />
 
         <ActionButton
           icon="🔍"
-          title="Buscar Personas Reportadas"
+          title="Buscar personas reportadas"
           href="/buscar"
         />
 
-        <ActionButton icon="🗺️" title="Ver Mapa" href="/mapa" />
+        <ActionButton icon="🗺️" title="Mapa de ubicaciones críticas" href="/mapa" />
 
-        <ActionButton icon="🤝" title="Solidaridad Vecinal" href="/ayuda" />
+        <ActionButton icon="🤝" title="Solidaridad vecinal (Ofrece o solicita apoyo)" href="/ayuda" />
+
       </div>
 
       <p className="mt-12 text-sm text-center text-gray-500 max-w-xl">
-        La información publicada es compartida por la comunidad y puede
+        La información publicada es de dominio público, compartida por la comunidad y puede
         actualizarse conforme avancen las labores de rescate.
       </p>
     </main>

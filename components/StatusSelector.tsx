@@ -37,10 +37,12 @@ export default function StatusSelector({
       : "bg-gray-700"
   }`}
 >
-      <option value="pending">🟡 Pendiente</option>
+      <option value="pending">🟡 Por rescatar</option>
       <option value="rescuing">🟠 En rescate</option>
       <option value="rescued">🟢 Rescatado</option>
-      <option value="closed">⚫ Cerrado</option>
+      
     </select>
   );
 }
+
+/*<option value="closed">⚫ Cerrado</option>*/

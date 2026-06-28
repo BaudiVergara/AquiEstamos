@@ -32,7 +32,7 @@ export default function ReportarPage() {
   };
 
   const [persons, setPersons] = useState<Person[]>([]);
-  /* const [photos, setPhotos] = useState<File[]>([]); */
+  const [photos, setPhotos] = useState<File[]>([]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -100,7 +100,7 @@ export default function ReportarPage() {
       setLoading(false);
     }
 
-    /*
+    
   if (photos.length > 0) {
 
   const photo = photos[0];
@@ -128,7 +128,7 @@ await supabase
     photo_url: publicUrl.publicUrl,
   });
 
-} */
+} 
 
     setSuccessMessage(
       "✅ Reporte enviado correctamente. Gracias por tu ayuda."
@@ -181,7 +181,7 @@ await supabase
 
         <p className="mt-2 text-gray-600">
           Registra la última ubicación donde sabes o crees que hay personas
-          atrapadas.
+          atrapadas
         </p>
 
         {successMessage && (
@@ -191,6 +191,76 @@ await supabase
         )}
 
         <form onSubmit={handleSubmit} className="mt-8 space-y-6">
+
+                  <div className="space-y-6 mt-4">
+            <hr className="my-10" />
+
+            <h2 className="text-2xl font-bold">
+              👤 Personas identificadas bajo los escombros
+            </h2>
+
+            {/* <p className="text-gray-600 mt-2 mb-6">
+              Si conoces el nombre de personas atrapadas, agregala aqui. Si no, simplemente envía el reporte.
+            </p> */}
+
+            {persons.map((person, index) => (
+              <div key={index} className="border rounded-xl p-5 bg-white">
+                <h3 className="font-semibold mb-4">Persona {index + 1}</h3>
+
+                <input
+                  type="text"
+                  placeholder="Nombre (si se conoce)"
+                  value={person.name}
+                  onChange={(e) => updatePerson(index, "name", e.target.value)}
+                  className="w-full border rounded-lg p-3 mb-3"
+                />
+
+                <input
+                  type="number"
+                  placeholder="Edad aproximada"
+                  value={person.age}
+                  onChange={(e) => updatePerson(index, "age", e.target.value)}
+                  className="w-full border rounded-lg p-3 mb-3"
+                />
+
+                <select
+                  value={person.sex}
+                  onChange={(e) => updatePerson(index, "sex", e.target.value)}
+                  className="w-full border rounded-lg p-3 mb-3"
+                >
+                  <option value="">Sexo</option>
+                  <option>Hombre</option>
+                  <option>Mujer</option>
+                  <option>No binario</option>
+                  <option>No se sabe</option>
+                </select>
+
+                <textarea
+                  placeholder="Condiciones médicas, señas fisicas, estado actual de la persona o algun dato importante"
+                  value={person.medical_conditions}
+                  onChange={(e) =>
+                    updatePerson(index, "medical_conditions", e.target.value)
+                  }
+                  className="w-full border rounded-lg p-3"
+                />
+              </div>
+            ))}
+          </div>
+
+          {successMessage && (
+            <div className="rounded-lg bg-green-100 border border-green-300 text-green-800 p-4">
+              {successMessage}
+            </div>
+          )}
+
+          <div className="mt-8 flex flex-col gap-4">
+            <button
+              type="button"
+              onClick={addPerson}
+              className="border border-blue-600 text-blue-600 px-5 py-3 rounded-lg hover:bg-blue-50"
+            >
+              ➕ Agregar una persona
+            </button>
 
           <div>
             <label className="font-semibold">Número de personas estimadas</label>
@@ -233,7 +303,7 @@ await supabase
 
             <textarea
               rows={5}
-              placeholder="Describe lo que viste. Por ejemplo: cuántas personas había, si escuchaste voces, si el acceso está bloqueado o cualquier otro detalle que pueda ayudar a los equipos de rescate."
+              placeholder="Describe lo que viste o sabes. Por ejemplo: cuántas personas había, si escuchaste voces, si el acceso está bloqueado o cualquier otro detalle que pueda ayudar a los equipos de rescate."
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               className="w-full border border-gray-300 rounded-lg p-3 bg-white text-black placeholder:text-gray-500"
@@ -256,25 +326,33 @@ await supabase
             </p>
           </div>
 
-          {/*
+          
           <div className="mt-6">
             <label className="block font-semibold mb-2">
-              📷 Fotografías (opcional)
+              📷 Fotografías
             </label>
+            <p className="mt-2 text-sm text-gray-500">
+  Puedes subir hasta 3 fotografías del incidente.
+</p>
 
             <input
               type="file"
               multiple
               accept="image/*"
-              onChange={(e) => {
-                const files = Array.from(e.target.files || []);
-                setPhotos(files);
-              }}
+onChange={(e) => {
+  const files = Array.from(e.target.files || []);
+
+  if (files.length > 3) {
+    alert("Puedes subir un máximo de 3 fotografías.");
+  }
+
+  setPhotos(files.slice(0, 3));
+}}
               className="w-full border border-gray-300 rounded-lg p-3 bg-white text-black"
             />
 
             <p className="mt-1 text-sm text-gray-500">
-              Agrega fotografías del lugar si es seguro hacerlo.
+              Agrega fotografías de la(s) persona(s) por rescatar y/o del lugar del incidente.
             </p>
             {photos.length > 0 && (
               <p className="mt-2 text-green-700 font-medium">
@@ -284,7 +362,7 @@ await supabase
             )}
           </div>
 
-          */}
+          
 
           <div>
             <label className="font-semibold block mb-2">
@@ -311,78 +389,8 @@ await supabase
               </div>
             )}
           </div>
-          <h2 className="text-2xl font-bold mt-10">Personas reportadas</h2>
 
-          <div className="space-y-6 mt-4">
-            <hr className="my-10" />
 
-            <h2 className="text-2xl font-bold">
-              👤 Personas identificadas (Opcional)
-            </h2>
-
-            <p className="text-gray-600 mt-2 mb-6">
-              Si conoces información de alguna persona atrapada puedes agregarla
-              aquí. Si no conoces a nadie, simplemente envía el reporte.
-            </p>
-
-            {persons.map((person, index) => (
-              <div key={index} className="border rounded-xl p-5 bg-white">
-                <h3 className="font-semibold mb-4">Persona {index + 1}</h3>
-
-                <input
-                  type="text"
-                  placeholder="Nombre (si se conoce)"
-                  value={person.name}
-                  onChange={(e) => updatePerson(index, "name", e.target.value)}
-                  className="w-full border rounded-lg p-3 mb-3"
-                />
-
-                <input
-                  type="number"
-                  placeholder="Edad aproximada"
-                  value={person.age}
-                  onChange={(e) => updatePerson(index, "age", e.target.value)}
-                  className="w-full border rounded-lg p-3 mb-3"
-                />
-
-                <select
-                  value={person.sex}
-                  onChange={(e) => updatePerson(index, "sex", e.target.value)}
-                  className="w-full border rounded-lg p-3 mb-3"
-                >
-                  <option value="">Sexo</option>
-                  <option>Hombre</option>
-                  <option>Mujer</option>
-                  <option>No binario</option>
-                  <option>No se sabe</option>
-                </select>
-
-                <textarea
-                  placeholder="Condiciones médicas o información importante"
-                  value={person.medical_conditions}
-                  onChange={(e) =>
-                    updatePerson(index, "medical_conditions", e.target.value)
-                  }
-                  className="w-full border rounded-lg p-3"
-                />
-              </div>
-            ))}
-          </div>
-
-          {successMessage && (
-            <div className="rounded-lg bg-green-100 border border-green-300 text-green-800 p-4">
-              {successMessage}
-            </div>
-          )}
-
-          <div className="mt-8 flex flex-col gap-4">
-            <button
-              type="button"
-              onClick={addPerson}
-              className="border border-blue-600 text-blue-600 px-5 py-3 rounded-lg hover:bg-blue-50"
-            >
-              ➕ Agregar una persona
-            </button>
 
             {successMessage && (
               <div className="rounded-lg bg-green-100 border border-green-300 text-green-800 p-4">
