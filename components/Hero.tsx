@@ -65,7 +65,7 @@ export default function Hero({
 
         <ActionButton icon="🗺️" title="Mapa de ubicaciones críticas" href="/mapa" />
 
-        <ActionButton icon="🤝" title="Solidaridad vecinal (Ofrece o solicita apoyo)" href="/ayuda" />
+        
 
       </div>
 
@@ -76,3 +76,6 @@ export default function Hero({
     </main>
   );
 }
+
+
+/* <ActionButton icon="🤝" title="Solidaridad vecinal (Ofrece o solicita apoyo)" href="/ayuda" /> */
