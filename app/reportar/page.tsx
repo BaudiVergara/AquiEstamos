@@ -187,7 +187,7 @@ await supabase
         <form onSubmit={handleSubmit} className="mt-8 space-y-6">
 
           <div>
-            <label className="font-semibold">Personas estimadas</label>
+            <label className="font-semibold">Número de personas estimadas</label>
 
             <input
               type="number"
