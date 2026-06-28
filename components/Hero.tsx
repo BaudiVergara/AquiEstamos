@@ -17,17 +17,17 @@ export default function Hero({
   return (
     <main className="min-h-screen bg-slate-100 flex flex-col items-center px-6 py-12">
       <div className="flex items-center justify-center gap-3">
-  <h1 className="text-5xl font-bold text-blue-700">
-    📍AquíEstamos
-  </h1>
-    <Image
+            <Image
     src="/ve.png"
     alt="Bandera de Venezuela"
     width={38}
     height={28}
+    className="mb-2"
   />
 </div>
-
+  <h1 className="text-5xl font-bold text-blue-700">
+    📍AquíEstamos
+  </h1>
       <p className="mt-4 text-center text-xl text-gray-700 max-w-xl">
         Plataforma para registrar la ubicacion de personas atrapadas en los escombros.
       </p>
