@@ -28,6 +28,7 @@ type Incident = {
   address: string;
   latitude: number;
   longitude: number;
+  status: string;
 };
 
 type Props = {
