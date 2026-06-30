@@ -68,7 +68,18 @@ export default function Hero({
         
 
       </div>
-
+      <p className="mt-12 text-sm text-center text-gray-500 max-w-xl">
+        <strong>Trabajemos juntos en la respuesta a emergencias.</strong>
+        <br/>
+      Si perteneces a una entidad de rescate y deseas acceder a la información de los
+        incidentes reportados para apoyar las labores de respuesta, contáctanos en{" "}
+        <a
+          href="mailto:aquiestamosapp@gmail.com"
+          className="text-blue-600 hover:underline font-semibold"
+        >
+          aquiestamosapp@gmail.com
+        </a>.
+      </p>
       <p className="mt-12 text-sm text-center text-gray-500 max-w-xl">
         La información publicada es de dominio público, compartida por la comunidad y puede
         actualizarse conforme avancen las labores de rescate.
